@@ -16,8 +16,8 @@ https://en.wikipedia.org/wiki/Travelling_salesman_problem
 In order for this file to run, you must install the pandas and mpu this can be done with the following:
 
 ```
-pip install selenium
-pip install geopy
+pip install mpu
+pip install pandas
 ```
 It is also neccesary to have the zip_codes.csv file, from this repository, in the same folder as the politician.py file.
 
