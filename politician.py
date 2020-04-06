@@ -85,7 +85,8 @@ zipcodes = {
 "WY": 82001,  #wyoming
 "DC": 20500}  #DC
 
-                
+
+
 #creates a permuation of all combinations of states
 #middle must be a list of states, start and end are a string
 def perms(start, middle, end):
@@ -122,22 +123,43 @@ def politician(start, middle,end):
             minDistance = tmpDistance
     return(minDistance, ':'.join(allPermutations[minIndex]))
         
-    
+import os
+
 if __name__ == "__main__":
-    with open(sys.argv[1]) as json_data:
-        input = json.load(json_data)
-        if input is None:
-            print("Error: Could not read JSON")
-    start = input["start"]
-    middle = str.split(input["middle"], sep = ",")
-    end = input["end"]
-    solution = politician(start, middle, end)
-    jsonDict = {}
-    jsonDict["Distance"] = str(round(solution[0],1)) + " miles"
-    jsonDict["Path"] = solution[1]
-    jsonFile = json.dumps(jsonDict)
-    path = sys.argv[2]
-    f = open(path, 'w+')
-    json.dump(jsonDict, f, indent=4)
-    f.close()
+    this_dir = os.path.dirname(os.path.realpath(__file__))
+    log_path = os.path.join(this_dir, 'log.txt')
+    log = open(log_path, 'a+')
+    log.write('\n')
+    log.write('Args: ' + str(sys.argv) + ' ')
+    try:
+        with open(sys.argv[1]) as json_data:
+            input = json.load(json_data)
+            if input is None:
+                print("Error: Could not read JSON")
+        start = input["start"]
+        middle = str.split(input["middle"], sep = ",")
+        
+        end = input["end"]
+        solution = politician(start, middle, end)
+        jsonDict = {}
+        jsonDict["Distance"] = str(round(solution[0],1)) + " miles"
+        jsonDict["Path"] = solution[1]
+        jsonFile = json.dumps(jsonDict)
+        path = sys.argv[2]
+        f = open(path, 'w+')
+        json.dump(jsonDict, f, indent=4)
+        f.close()
+    except ValueError as err:
+        log.write(str(err))
+    except KeyError as err:
+        log.write(str(err))
+    except OSError as err:
+        log.write(str(err))
+    except NameError as err:
+        log.write(str(err))
+    except TimeoutError as err:
+        log.write(str(err))
+    except:
+        log.write("Unknown Error")
+        raise
     
