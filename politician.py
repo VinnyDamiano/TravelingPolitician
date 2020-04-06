@@ -1,64 +1,37 @@
+'''
+    File name: politician.py
+    Author: Vincent Damiano
+    Date created: 3/22/2020
+    Date last modified: 4/5/2020
+    Python Version: 3.8
+'''
+
 import pandas as pd 
 import mpu
 import sys
 import copy
 import itertools
+import json
 
+#reading in our zip code date
 data = pd.read_csv("zip_codes.csv") 
 data = data.drop(["City", "State", "Classification", "Population"], axis = 1)
 
-
+#calculates the distance between two zip codes
 def distance(zip1,zip2):
     x = data.loc[data['ZipCode'] == zip1].index
     y = data.loc[data['ZipCode'] == zip2].index
+    #reads the lat and long data from our zipcode data
     lat1 = data.iloc[x[0]]['Latitude']
     lon1 = data.iloc[x[0]]['Longitude']
     lat2 = data.iloc[y[0]]['Latitude']
     lon2 = data.iloc[y[0]]['Longitude']
     kmconstant = .621371
     dist = mpu.haversine_distance((lat1, lon1), (lat2, lon2))
+    #returns distance in miles
     return dist*kmconstant
     
-def V1_0():
-    dict = {"IA:DC": distance(50301, 20500)}
-    return ("IA:DC",dict["IA:DC"])
-    
-    
-def V1_1():
-    iowaCal = distance(50301,94203)
-    calDC = distance(94203, 20500)
-    return iowaCal + calDC
-    
-def V1_2():
-    calNY = distance(94203,12201)
-    iowaCal  = distance(50301,94203)
-    nyDC = distance(12201, 20500)
-    option1 = calNY + iowaCal + nyDC
-    iowaNY = distance(50301, 94203)
-    calDC = distance(94203,20500)
-    option2 = iowaNY + iowaCal + calDC
-    return min(option1,option2) 
-
-def v1_3():
-    dict = {}
-    iowaWash = distance(50301, 98501)
-    washNY = distance(12201,98501)
-    nyCal =  distance(12201, 94203)
-    calDC = distance(94203, 20500)
-    dict["IA:WA:NY:CA:DC"] = iowaWash + washNY + nyCal + calDC
-    washCal = distance(98501,94203)
-    nyDC = distance(12201,20500)
-    dict["IA:WA:CA:NY:DC"] = iowaWash + washCal + nyCal + nyDC
-    iowaCal  = distance(50301,94203)
-    dict["IA:CA:WA:NY:DC"] = iowaCal + washCal + washNY + nyDC
-    washDC = distance(20500, 98501)
-    dict["IA:CA:NY:WA:DC"] = iowaCal + nyCal + washNY + washDC
-    iowaNY = distance(12201, 94203)
-    dict["IA:NY:CA:WA:DC"] = iowaNY + nyCal + washCal + washDC
-    dict["IA:NY:WA:CA:DC"] = iowaNY + washNY + washCal + calDC
-    key_min = min(dict.keys(), key=(lambda k: dict[k]))
-    return (key_min, dict[key_min])
-     
+#a dictionary containing the zipcodes of all 50 states capitals and D.C.
 zipcodes = {
 "AL": 36101,  #Alabama
 "AK": 99801,  #Alaska
@@ -113,7 +86,8 @@ zipcodes = {
 "DC": 20500}  #DC
 
                 
-                            
+#creates a permuation of all combinations of states
+#middle must be a list of states, start and end are a string
 def perms(start, middle, end):
     perms = itertools.permutations(middle)
     perms = list(perms)
@@ -125,17 +99,20 @@ def perms(start, middle, end):
         finalPerms.append(cur)
     return finalPerms
       
+#given a list of states, calculates distance of that path in order
 def pathDistance(lst, minDistance):
     dist = 0
     for i in range(len(lst)-1):
         dist += distance(zipcodes[lst[i]], zipcodes[lst[i+1]])
         if dist > minDistance:
+            #return -1 if our distance exceeds our min distance thus far
             return -1
     return dist
         
-
+#solves tarveling politician problem
 def politician(start, middle,end):
     allPermutations = perms(start, middle, end)
+    #start with our min distance at 2 ^ 31
     minDistance = sys.maxsize
     minIndex = 0
     for i in range(len(allPermutations)):
@@ -147,11 +124,20 @@ def politician(start, middle,end):
         
     
 if __name__ == "__main__":
-    start = input("Start: ")
-    middle = input("Middle: ")
-    end = input("End: ")
-    newMid = []
-    for i in range(0,len(middle),2):
-        newMid.append(middle[i:i+2])
-    print(politician(start, newMid, end))
+    with open(sys.argv[1]) as json_data:
+        input = json.load(json_data)
+        if input is None:
+            print("Error: Could not read JSON")
+    start = input["start"]
+    middle = str.split(input["middle"], sep = ",")
+    end = input["end"]
+    solution = politician(start, middle, end)
+    jsonDict = {}
+    jsonDict["Distance"] = str(round(solution[0],1)) + " miles"
+    jsonDict["Path"] = solution[1]
+    jsonFile = json.dumps(jsonDict)
+    path = sys.argv[2]
+    f = open(path, 'w+')
+    json.dump(jsonDict, f, indent=4)
+    f.close()
     
