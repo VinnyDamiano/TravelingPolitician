@@ -1,4 +1,9 @@
 {
+	"Input": {
+        "Start": "",
+        "Middle": "",
+        "End": ""
+    },
     "Distance": "",
     "Path": ""
 }

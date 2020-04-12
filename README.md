@@ -59,6 +59,11 @@ Your Json output file should have both a distance and a path field. Each time we
 
 ```
 {
+    "Input": {
+      "Start": "IA",
+      "Middle": "CA,WA,NY",
+      "End": "DC"
+    },
     "Distance": "4762.3 miles",
     "Path": "IA:CA:WA:NY:DC"
 }

@@ -1,11 +1,30 @@
-'''
-    File name: politician.py
-    Author: Vincent Damiano
-    Date created: 3/22/2020
-    Date last modified: 4/5/2020
-    Python Version: 3.8
-'''
 
+###############################################################################
+#
+#FILE:  politician.py
+#
+#USAGE: politician.py INPUTJSONFILE OUTPUTJSONFILE
+#
+#DESCRIPTION: This file constains a solution to the traveling politician problem.
+#             See https://github.com/VinnyDamiano/TravelingPolitician to learn 
+#             more about the problem.
+#
+#DEVELOPER: Vincent Damiano   
+#DEVELOPER PHONE: +1 (631)-786-7688
+#DEVELOPER EMAIL: vinnyd783@yahoo.com
+#
+#   
+#VERSION 1.0
+#CREATED DATE-TIME: 03/22/2020-18:00 Eastern Standard Time  USA
+#
+#   
+#VERSION 1.1
+#REVISION DATE-TIME: 04/05/2020-18:00
+#DEVELOPER MAKING CHANGE: Vincent Damiano					
+#DEVELOPER MAKING CHANGE: PHONE: +1 (631)-786-7688			
+#DEVELOPER MAKING CHANGE: EMAIL: vinnyd783@yahoo.com	
+#   
+###############################################################################
 import pandas as pd 
 import mpu
 import sys
@@ -142,8 +161,10 @@ if __name__ == "__main__":
         end = input["end"]
         solution = politician(start, middle, end)
         jsonDict = {}
+        jsonDict["Input"] = {"Start":start, "Middle":middle, "End": end}
         jsonDict["Distance"] = str(round(solution[0],1)) + " miles"
         jsonDict["Path"] = solution[1]
+        
         jsonFile = json.dumps(jsonDict)
         path = sys.argv[2]
         f = open(path, 'w+')
