@@ -85,8 +85,7 @@ Processor: Intel(R) Core(TM) i7-7500u CPU @ 2.7 GHz
 System Type: 64 Bit OS x-64 based processor
 ```
 I was able to collect the following data:
-
-![Runtime Data](C:/Users/vnjda/Desktop/ERT JOB/runtime.PNG)
+![Runtime Data](images/runtime.png)
 
 From this data we see that we have a factorial curve. To predict the time needed for more states, we can use the equation:
 
