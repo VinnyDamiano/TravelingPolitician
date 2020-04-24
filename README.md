@@ -76,6 +76,23 @@ To add or change location you will want to open the politician.py file. In that 
 ```
 zipcodes["ABREVIATION"] = ZIPCODE
 ```
+### Runtime Aanalysis
+
+The current system specs that I am running this program on are:
+```
+OS: Windows 10
+Processor: Intel(R) Core(TM) i7-7500u CPU @ 2.7 GHz
+System Type: 64 Bit OS x-64 based processor
+```
+I was able to collect the following data:
+
+![Runtime Data](C:/Users/vnjda/Desktop/ERT JOB/runtime.PNG)
+
+From this data we see that we have a factorial curve. To predict the time needed for more states, we can use the equation:
+
+```
+Seconds = (Number of Middle States)! / 100
+```
 
 ### Authors 
 * **Vincent Damiano** 

@@ -31,6 +31,12 @@ import sys
 import copy
 import itertools
 import json
+import time
+import csv
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+
 
 #reading in our zip code date
 data = pd.read_csv("zip_codes.csv") 
@@ -159,7 +165,9 @@ if __name__ == "__main__":
         middle = str.split(input["middle"], sep = ",")
         
         end = input["end"]
+        
         solution = politician(start, middle, end)
+        
         jsonDict = {}
         jsonDict["Input"] = {"Start":start, "Middle":middle, "End": end}
         jsonDict["Distance"] = str(round(solution[0],1)) + " miles"
@@ -184,3 +192,45 @@ if __name__ == "__main__":
         log.write("Unknown Error")
         raise
     
+    #How i collected my timing data
+    '''
+    with open('timing.csv', mode='w') as csv_file:
+        fieldnames = ['n', 'time']
+        writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
+        mid = ['CA','NY', 'ND']
+        for i in range(20):
+            x = time.time()
+            politician('IA', mid, 'DC')
+            y = time.time()
+            writer.writerow({'n': '3', 'time': str(y-x)})
+        mid = ['CA','NY']
+        for i in range(20):
+            x = time.time()
+            politician('IA', mid, 'DC')
+            y = time.time()
+            writer.writerow({'n': '2', 'time': str(y-x)})
+        mid = ['CA','NY', 'ND', 'WA']
+        for i in range(20):
+            x = time.time()
+            politician('IA', mid, 'DC')
+            y = time.time()
+            writer.writerow({'n': '4', 'time': str(y-x)})
+        mid = ['CA','NY', 'ND', 'WA', 'FL']
+        for i in range(15):
+            x = time.time()
+            politician('IA', mid, 'DC')
+            y = time.time()
+            writer.writerow({'n': '5', 'time': str(y-x)})
+        mid = ['CA','NY', 'ND', 'WA', 'FL', 'GA']
+        for i in range(10):
+            x = time.time()
+            politician('IA', mid, 'DC')
+            y = time.time()
+            writer.writerow({'n': '6', 'time': str(y-x)})
+        mid = ['CA','NY', 'ND', 'WA', 'FL', 'GA', 'NJ']
+        for i in range(3):
+            x = time.time()
+            politician('IA', mid, 'DC')
+            y = time.time()
+            writer.writerow({'n': '7', 'time': str(y-x)})
+    '''
